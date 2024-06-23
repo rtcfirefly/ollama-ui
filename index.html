@@ -6,110 +6,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <link href="resources/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="resources/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
     <script src="resources/marked.min.js"
-        integrity="sha384-dZulhREgb+hCgQMhZ2VG0l37VQj5pJBq2w0h7Jn3tdMn36aXNepF1+FMLBB4O649"
-        crossorigin="anonymous"></script>
+            integrity="sha384-dZulhREgb+hCgQMhZ2VG0l37VQj5pJBq2w0h7Jn3tdMn36aXNepF1+FMLBB4O649"
+            crossorigin="anonymous"></script>
     <script src="resources/purify.min.js" integrity="sha256-QigBQMy2be3IqJD2ezKJUJ5gycSmyYlRHj2VGBuITpU="
-        crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>
     <script src="resources/jquery-3.7.1.min.js" integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs"
-        crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" href="chat.css">
 </head>
 
 <body data-bs-theme="dark">
-    <div class="container">
-            <div id="scroll-wrapper">
-                <div id="chat-container" class="card">
-                    <div class="card-body">
-                        <div id="chat-history"></div>
-                    </div>
+<div class="container">
+    <div id="scroll-wrapper">
+        <div id="chat-container" class="card">
+            <div class="card-body">
+                <div id="chat-history"></div>
             </div>
-                        </div>
-                    </div>
+        </div>
+    </div>
+</div>
 
-        <div class="position-fixed w-100" style="z-index: 9999; top: 0px; height: 200px; background: linear-gradient(180deg, black, transparent);">
+<div class="position-fixed w-100" style="z-index: 9999; top: 0px; height: 200px; background: linear-gradient(180deg, black, transparent);">
 
-          <div class="position-fixed w-100" style="z-index: 9999; top: 0px; height: 200px;  background: linear-gradient(180deg, black, transparent);">
-            <div class="d-flex justify-content-between align-items-center m-0" style="padding: 16px;">
+    <div class="position-fixed w-100" style="z-index: 9999; top: 0px; height: 200px;  background: linear-gradient(180deg, black, transparent);">
+        <div id="chat-options" class="d-flex align-items-stretch m-0 gap-3" style="padding: 16px;">
+            <div class="d-flex align-items-center flex-grow-1">
                 <h1>Chat with Ollama</h1>
-                <!-- Model dropdown -->
-                <div class="d-flex align-items-center m-1">
-                  <div class="p-2 flex-grow-1 bd-highlight">
-                    <label for="system-prompt" class="me-2" style="font-size: normal;">System Prompt</label>
-                    <input id="system-prompt" class="form-control" type="text" placeholder="You are a helpful assistant" style="width: auto;"></select>
-                    <label for="host-address" class="me-2" style="font-size: normal;">Hostname</label>
-                    <input id="host-address" class="form-control" type="text" placeholder="http://localhost:11434" style="width: auto;"></select>
-
-                  </div>
-                <div class="d-flex align-items-center m-2">
-                    <div class="p-2 flex-grow-1 bd-highlight">
-                        <label for="model-select" class="me-2" style="font-size: normal;">Model:</label>
-                        <select class="form-select me-5" id="model-select" style="width: auto;"></select>
-                        <label for="chat-select" class="me-2" style="font-size: normal;">History:</label>
-                        <select id="chat-select" class="form-select me-2" style="width: auto;">
-                            <option value="" disabled selected>Select a chat</option>
-                        </select>
-                    </div>
-                    <div class="p-auto flex-grow-1 bd-highlight">
-                        <div class="d-flex flex-column">
-                        <button id="new-chat" class="btn btn-dark mb-2" type="button">Reset</button>
-                        <button id="save-chat" class="btn btn-secondary mb-2" type="button" data-bs-toggle="modal" data-bs-target="#nameModal">Save</button>
-                        <button id="delete-chat" class="btn btn-danger" type="button">Delete</button>
-                      </div>
-                    </div>
+            </div>
+            <!-- Model dropdown -->
+            <div class="d-flex flex-column gap-3 align-items-start bd-highlight">
+                <div>
+                    <label for="system-prompt" class="me-2" style="font-size: medium;">System Prompt</label>
+                    <input id="system-prompt" class="form-control" type="text" placeholder="You are a helpful assistant" style="width: auto;"/>
+                </div>
+                <div>
+                    <label for="host-address" class="me-2" style="font-size: medium;">Hostname</label>
+                    <input id="host-address" class="form-control" type="text" placeholder="http://localhost:11434" style="width: auto;"/>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-3 align-items-start bd-highlight">
+                <div><label for="model-select" class="me-2" style="font-size: medium;">Model:</label>
+                    <select class="form-select me-5" id="model-select"></select>
+                </div>
+                <div>
+                    <label for="chat-select" class="me-2" style="font-size: medium;">History:</label>
+                    <select class="form-select me-2" id="chat-select">
+                        <option value="" disabled selected>Select a chat</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-3 align-items-start bd-highlight">
+                <div>
+                    <label for="output-select" class="me-2" style="font-size: normal;">Output:</label>
+                    <select class="form-select me-5" id="output-select">
+                        <option value="">Text</option>
+                        <option value="json">Json</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-3 align-items-start bd-highlight">
+                <div class="d-flex flex-column align-items-stretch">
+                    <button id="new-chat" class="btn btn-dark mb-2" type="button">Reset</button>
+                    <button id="save-chat" class="btn btn-secondary mb-2" type="button" data-bs-toggle="modal" data-bs-target="#nameModal">Save</button>
+                    <button id="delete-chat" class="btn btn-danger" type="button">Delete</button>
                 </div>
             </div>
         </div>
 
 
-
-
-    <div class="container p-2 card" id="input-area">
-        <div class="input-group">
+        <div class="container p-2 card" id="input-area">
+            <div class="input-group">
                 <textarea class="form-control" id="user-input" placeholder="Type your question here..." oninput="autoGrow(this)"></textarea>
-            <button id="send-button" class="btn btn-primary">Send</button>
+                <button id="send-button" class="btn btn-primary">Send</button>
+            </div>
         </div>
-    </div>
 
-<!-- Modal -->
-<div class="modal fade" id="nameModal" tabindex="-1" aria-labelledby="nameModalLabel" aria-hidden="true" >
-    <div class="modal-dialog" >
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="nameModalLabel">Enter Your Name</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Modal -->
+        <div class="modal fade" id="nameModal" tabindex="-1" aria-labelledby="nameModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="nameModalLabel">Enter Your Name</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="userName" placeholder="Your Name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveName">Save</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <input type="text" class="form-control" id="userName" placeholder="Your Name">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveName">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="modal fade" id="errorModal" tabindex="-1">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Unable to access Ollama server</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal fade" id="errorModal" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Unable to access Ollama server</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorText"></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <p id="errorText"></p>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <script src="api.js"></script>
-  <script src="chat.js"></script>
+        <script src="api.js"></script>
+        <script src="chat.js"></script>
 
 </body>
 

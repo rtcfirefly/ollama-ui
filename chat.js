@@ -110,6 +110,11 @@ function getSelectedModel() {
   return document.getElementById('model-select').value;
 }
 
+// Function to get the selected output format
+function getSelectedOutputFormat() {
+  return document.getElementById('output-select').value;
+}
+
 // variables to handle auto-scroll
 // we only need one ResizeObserver and isAutoScrollOn variable globally
 // no need to make a new one for every time submitRequest is called
@@ -155,9 +160,16 @@ async function submitRequest() {
 
   const input = document.getElementById('user-input').value;
   const selectedModel = getSelectedModel();
+  const selectedOutputFormat = getSelectedOutputFormat();
   const context = document.getElementById('chat-history').context;
   const systemPrompt = document.getElementById('system-prompt').value;
-  const data = { model: selectedModel, prompt: input, context: context, system: systemPrompt };
+  const data = {
+    model: selectedModel,
+    prompt: input,
+    context: context,
+    system: systemPrompt,
+    format: selectedOutputFormat || undefined
+  };
 
   // Create user message element and append to chat history
   let chatHistory = document.getElementById('chat-history');

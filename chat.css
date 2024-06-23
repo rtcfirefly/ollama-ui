@@ -1,55 +1,59 @@
 
 body {
-    /* background-color: #0b3d91; */
-    color: #f5f5f5;
-    font-family: 'Arial', sans-serif;
+  /* background-color: #0b3d91; */
+  color: #f5f5f5;
+  font-family: 'Arial', sans-serif;
 }
 
 .user-message {
-    background-color: rgb(86, 144, 163);
-	color: white;
-    padding: 10px;
-    border-radius: 10px;
-    white-space: pre-wrap;
-    margin-left: auto;
-    margin-right: 0;
-    max-width: 90%;
-     }
+  background-color: rgb(86, 144, 163);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  white-space: pre-wrap;
+  margin-left: auto;
+  margin-right: 0;
+  max-width: 90%;
+}
 
-  /* Style for received messages */
-  .response-message {
-    background-color: rgb(62, 62, 62);
-	  color: white;
-    padding: 10px;
-    border-radius: 10px;
-    padding-right: 20px;
-    position: relative;
-    margin-right: auto;
-    max-width: 90%;
-  }
+/* Style for received messages */
+.response-message {
+  background-color: rgb(62, 62, 62);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  padding-right: 20px;
+  position: relative;
+  margin-right: auto;
+  max-width: 90%;
+}
 
-  .response-message p {
-    margin-right: 40px;
-    /* Add more styles here */
-  }
+.response-message p {
+  margin-right: 40px;
+  /* Add more styles here */
+}
 
-  /* Style for the chat container */
-  #chat-container {
-    display: none;
-    margin: 0 auto;
-    overflow: auto;
-  }
+/* Style for the chat container */
+#chat-container {
+  display: none;
+  margin: 0 auto;
+  overflow: auto;
+}
 
 .host-address-select {
   background-color: red;
-	color: white;
-    padding: 1000px;
-    border-radius: 1000px;
+  color: white;
+  padding: 1000px;
+  border-radius: 1000px;
+}
+
+#chat-options select {
+  width: 100%;
 }
 
 #chat-history {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .copy-button {
@@ -73,12 +77,13 @@ body {
 
 #user-input {
   overflow-y: auto;
-  resize: none;         /* Prevent user from manually resizing */
+  resize: none; /* Prevent user from manually resizing */
   height: 40px;
-  max-height: 200px;    /* Set your desired max height here */
+  max-height: 200px; /* Set your desired max height here */
 }
 
-@media (max-width: 600px) { /* Adjust 600px to the breakpoint you desire */
+@media (max-width: 600px) {
+  /* Adjust 600px to the breakpoint you desire */
   .d-flex h1 {
     display: none; /* This will hide the h1 when the window width is 600px or less */
   }
