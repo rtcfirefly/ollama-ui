@@ -5,6 +5,9 @@ Just a simple HTML UI for Ollama
 Now available as a chrome extension!
 https://chrome.google.com/webstore/detail/ollama-ui/cmgdpmlhgjhoadnonobjeekmfcehffco
 
+For Ollama setup you can use below exntetion!
+https://chromewebstore.google.com/detail/opentalkgpt/idknomikbgopkhpepapoehhoafacddlk
+
 ## Usage
 
 ```
