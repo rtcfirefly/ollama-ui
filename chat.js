@@ -81,10 +81,10 @@ async function populateModels() {
   }
   catch (error) {
     document.getElementById('errorText').innerHTML =
-    DOMPurify.sanitize(marked.parse(
-    `Ollama-ui was unable to communitcate with Ollama due to the following error:\n\n`
-    + `\`\`\`${error.message}\`\`\`\n\n---------------------\n`
-    + faqString));
+      DOMPurify.sanitize(marked.parse(
+        `Ollama-ui was unable to communitcate with Ollama due to the following error:\n\n`
+        + `\`\`\`${error.message}\`\`\`\n\n---------------------\n`
+        + faqString));
     let modal = new bootstrap.Modal(document.getElementById('errorModal'));
     modal.show();
   }
@@ -118,7 +118,7 @@ let isAutoScrollOn = true;
 // autoscroll when new line is added
 const autoScroller = new ResizeObserver(() => {
   if (isAutoScrollOn) {
-    scrollWrapper.scrollIntoView({behavior: "smooth", block: "end"});
+    scrollWrapper.scrollIntoView({ behavior: "smooth", block: "end" });
   }
 });
 
@@ -192,45 +192,48 @@ async function submitRequest() {
   // change autoScroller to keep track of our new responseDiv
   autoScroller.observe(responseDiv);
 
-  postRequest(data, interrupt.signal)
+  let responseWords = ""
+  postRequest()
     .then(async response => {
-      await getResponse(response, parsedResponse => {
+
+      interrupt.signal.onabort = () => {
+        response.abort()
+        stopButton.remove();
+        spinner.remove();
+      }
+
+      await getResponse(data, response, parsedResponse => {
         let word = parsedResponse.response;
+        if (word != undefined && word != "") {
+          responseWords += word;
+        }
+
+        responseDiv.innerHTML = DOMPurify.sanitize(marked.parse(responseWords + " **...**"));
+
         if (parsedResponse.done) {
+          responseDiv.innerHTML = DOMPurify.sanitize(marked.parse(responseWords));
           chatHistory.context = parsedResponse.context;
           // Copy button
           let copyButton = document.createElement('button');
           copyButton.className = 'btn btn-secondary copy-button';
           copyButton.innerHTML = clipboardIcon;
           copyButton.onclick = () => {
-            navigator.clipboard.writeText(responseDiv.hidden_text).then(() => {
+            navigator.clipboard.writeText(responseWords).then(() => {
               console.log('Text copied to clipboard');
             }).catch(err => {
               console.error('Failed to copy text:', err);
             });
           };
           responseDiv.appendChild(copyButton);
-        }
-        // add word to response
-        if (word != undefined && word != "") {
-          if (responseDiv.hidden_text == undefined){
-            responseDiv.hidden_text = "";
-          }
-          responseDiv.hidden_text += word;
-          responseDiv.innerHTML = DOMPurify.sanitize(marked.parse(responseDiv.hidden_text)); // Append word to response container
+
+          stopButton.remove(); // Remove stop button from DOM now that all text has been generated
+          spinner.remove();
         }
       });
     })
-    .then(() => {
-      stopButton.remove(); // Remove stop button from DOM now that all text has been generated
-      spinner.remove();
-    })
     .catch(error => {
-      if (error !== 'Stop button pressed') {
-        console.error(error);
-      }
-      stopButton.remove();
-      spinner.remove();
+      console.log(error)
+
     });
 
   // Clear user input
@@ -280,7 +283,7 @@ function saveChat() {
   const context = document.getElementById('chat-history').context;
   const systemPrompt = document.getElementById('system-prompt').value;
   const model = getSelectedModel();
-  localStorage.setItem(chatName, JSON.stringify({"history":history, "context":context, system: systemPrompt, "model": model}));
+  localStorage.setItem(chatName, JSON.stringify({ "history": history, "context": context, system: systemPrompt, "model": model }));
   updateChatList();
 }
 
@@ -296,10 +299,10 @@ function loadSelectedChat() {
 }
 
 function startNewChat() {
-    document.getElementById("chat-history").innerHTML = null;
-    document.getElementById("chat-history").context = null;
-    document.getElementById('chat-container').style.display = 'none';
-    updateChatList();
+  document.getElementById("chat-history").innerHTML = null;
+  document.getElementById("chat-history").context = null;
+  document.getElementById('chat-container').style.display = 'none';
+  updateChatList();
 }
 
 // Function to update chat list dropdown
@@ -317,21 +320,21 @@ function updateChatList() {
 }
 
 function autoGrow(element) {
-    const maxHeight = 200;  // This should match the max-height set in CSS
+  const maxHeight = 200;  // This should match the max-height set in CSS
 
-    // Count the number of lines in the textarea based on newline characters
-    const numberOfLines = $(element).val().split('\n').length;
+  // Count the number of lines in the textarea based on newline characters
+  const numberOfLines = $(element).val().split('\n').length;
 
-    // Temporarily reset the height to auto to get the actual scrollHeight
-    $(element).css("height", "auto");
-    let newHeight = element.scrollHeight;
+  // Temporarily reset the height to auto to get the actual scrollHeight
+  $(element).css("height", "auto");
+  let newHeight = element.scrollHeight;
 
-    // If content is one line, set the height to baseHeight
-    if (numberOfLines === 1) {
-        newHeight = textBoxBaseHeight;
-    } else if (newHeight > maxHeight) {
-        newHeight = maxHeight;
-    }
+  // If content is one line, set the height to baseHeight
+  if (numberOfLines === 1) {
+    newHeight = textBoxBaseHeight;
+  } else if (newHeight > maxHeight) {
+    newHeight = maxHeight;
+  }
 
-    $(element).css("height", newHeight + "px");
+  $(element).css("height", newHeight + "px");
 }

@@ -8,13 +8,14 @@
     "declarativeNetRequest"
   ],
   "host_permissions": [
-    "http://*:11434/api/tags",
-    "http://*:11434/api/generate",
-    "https://*:11434/api/tags",
-    "https://*:11434/api/generate"
+    "http://*/api/tags",
+    "http://*/api/generate",
+    "https://*/api/tags",
+    "https://*/api/generate"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "scripts": ["background.js"]
   },
   "icons": {
     "16": "icon16.png",
