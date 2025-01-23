@@ -1,6 +1,6 @@
 var rebuildRules = undefined;
 if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
-    rebuildRules = async function (domain) {
+  rebuildRules = async function (domain) {
     const domains = [domain];
     /** @type {chrome.declarativeNetRequest.Rule[]} */
     const rules = [{
@@ -26,38 +26,38 @@ if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
 
 
 var ollama_host = localStorage.getItem("host-address");
-if (!ollama_host){
+if (!ollama_host) {
   ollama_host = 'http://localhost:11434'
 } else {
   document.getElementById("host-address").value = ollama_host;
 }
 
 const ollama_system_prompt = localStorage.getItem("system-prompt");
-if (ollama_system_prompt){
+if (ollama_system_prompt) {
   document.getElementById("system-prompt").value = ollama_system_prompt;
 }
 
-if (rebuildRules){
+if (rebuildRules) {
   rebuildRules(ollama_host);
 }
 
-function setHostAddress(){
+function setHostAddress() {
   ollama_host = document.getElementById("host-address").value;
   localStorage.setItem("host-address", ollama_host);
   populateModels();
-  if (rebuildRules){
+  if (rebuildRules) {
     rebuildRules(ollama_host);
   }
 }
 
-function setSystemPrompt(){
+function setSystemPrompt() {
   const systemPrompt = document.getElementById("system-prompt").value;
   localStorage.setItem("system-prompt", systemPrompt);
 }
 
 
 
-async function getModels(){
+async function getModels() {
   const response = await fetch(`${ollama_host}/api/tags`);
   const data = await response.json();
   return data;
@@ -65,43 +65,47 @@ async function getModels(){
 
 
 // Function to send a POST request to the API
-function postRequest(data, signal) {
+async function postRequest() {
   const URL = `${ollama_host}/api/generate`;
-  return fetch(URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data),
-    signal: signal
-  });
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  return xhr;
 }
 
 // Function to stream the response from the server
-async function getResponse(response, callback) {
-  const reader = response.body.getReader();
-  let partialLine = '';
+async function getResponse(data, xhr, callback) {
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) {
-      break;
+  let lastGoodIndex = 0;
+
+  // Handling the streaming response
+  xhr.onreadystatechange = () => {
+    const chunk = xhr.responseText;
+
+    //console.log("state", xhr.readyState, "chunk", chunk)
+
+    if (chunk != undefined || chunk != "") {
+      const lines = chunk.split('\n');
+
+      for (let index = lastGoodIndex; index < lines.length; index++) {
+        const line = lines[index];
+        if (line.trim() === '') continue;
+        try {
+          const parsedResponse = JSON.parse(line);
+          callback(parsedResponse); // Process each response word
+          lastGoodIndex = index+1;
+        } catch (e) {
+          // console.log(lineIndex, line)
+        }
+      }
     }
-    // Decode the received value and split by lines
-    const textChunk = new TextDecoder().decode(value);
-    const lines = (partialLine + textChunk).split('\n');
-    partialLine = lines.pop(); // The last line might be incomplete
+  };
 
-    for (const line of lines) {
-      if (line.trim() === '') continue;
-      const parsedResponse = JSON.parse(line);
-      callback(parsedResponse); // Process each response word
-    }
-  }
+  // Handling errors
+  xhr.onerror = () => {
+    console.error('Request failed');
+  };
 
-  // Handle any remaining line
-  if (partialLine.trim() !== '') {
-    const parsedResponse = JSON.parse(partialLine);
-    callback(parsedResponse);
-  }
+  xhr.send(JSON.stringify(data));
 }
