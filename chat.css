@@ -5,9 +5,41 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
+.w-100 {
+  z-index: 9999; 
+  top: 0px; 
+  height: 200px; 
+  background: linear-gradient(180deg, black, transparent);
+}
+
+h1 {
+  text-align: center;
+}
+
+.settings-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: black;
+  border: 2px dashed white;
+  border-radius: 10px;
+  top: 20vh;
+  height: max(55vh, min-content);
+  width: min(calc(100vw - 80px), 700px);
+}
+
+.settings-wrapper.hidden {
+  visibility: hidden;
+}
+
+.close-settings {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
 .user-message {
     background-color: rgb(86, 144, 163);
-	color: white;
+	  color: white;
     padding: 10px;
     border-radius: 10px;
     white-space: pre-wrap;
@@ -76,10 +108,4 @@ body {
   resize: none;         /* Prevent user from manually resizing */
   height: 40px;
   max-height: 200px;    /* Set your desired max height here */
-}
-
-@media (max-width: 600px) { /* Adjust 600px to the breakpoint you desire */
-  .d-flex h1 {
-    display: none; /* This will hide the h1 when the window width is 600px or less */
-  }
 }
